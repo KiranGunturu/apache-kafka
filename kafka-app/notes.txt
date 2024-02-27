@@ -1,0 +1,4 @@
+- when we have topic with single partition, all the messages will be written to the same topic
+- when we have topic with 2 partitions, messages will be published to both the partitions and it is all random not round robin.
+- every consumer is always assigned to a consumer group
+- if no group_id is provided then random group id is assigned

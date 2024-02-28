@@ -7,6 +7,7 @@ def main():
 
     spark = SparkSession.builder \
             .appName("streaming application") \
+            .config("spark.sql.shuffle.partitions", 3) \
             .master("local[2]") \
             .getOrCreate()
     

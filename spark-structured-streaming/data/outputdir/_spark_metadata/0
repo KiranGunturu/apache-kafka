@@ -1,0 +1,2 @@
+v1
+{"path":"file:///workspaces/apache-kafka/spark-structured-streaming/data/outputdir/part-00000-ce7d51b1-92e7-47fe-b5ce-e165f57c0b7f-c000.csv","size":82,"isDir":false,"modificationTime":1709153872805,"blockReplication":1,"blockSize":33554432,"action":"add"}

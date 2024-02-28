@@ -1,0 +1,6 @@
+{"order_id": 5, "order_date": "2013-07-25 00:00:00.0", "order_customer_id": 11318, "order_status": "COMPLETE"}
+{"order_id": 6, "order_date": "2013-07-25 00:00:00.0", "order_customer_id": 7130, "order_status": "COMPLETE"}
+{"order_id": 7, "order_date": "2013-07-25 00:00:00.0", "order_customer_id": 4530, "order_status": "COMPLETE"}
+{"order_id": 8, "order_date": "2013-07-25 00:00:00.0", "order_customer_id": 2911, "order_status": "PROCESSING"}
+{"order_id": 9, "order_date": "2013-07-25 00:00:00.0", "order_customer_id": 5657, "order_status": "PENDING_PAYMENT"}
+{"order_id": 10, "order_date": "2013-07-25 00:00:00.0", "order_customer_id": 5648, "order_status": "PENDING_PAYMENT"}

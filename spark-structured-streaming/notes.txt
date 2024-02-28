@@ -1,0 +1,121 @@
+producer
+========
+sudo apt update
+sudo apt install netcat
+nc -lk 9994
+
+consumer
+========
+from pyspark.sql.functions import *
+lines = spark.readStream.format("socket").option("host", "localhost").option("port", 9994).load()
+words = lines.select(explode(split(lines.value,  " ")).alias("word"))
+wordCounts = words.groupBy("word").count()
+query = wordCounts.writeStream.outputMode("complete").format("console").start()
+query.awaitTermination()
+
+
+
+- Complete output mode not supported when there are no streaming aggregations on streaming DataFrames/Datasets.
+- append mode will not support when there are streaming aggregations. should implement watermarking for this.
+- append output will only read new data from source.
+
+retail stores
+500 billing counters
+calculate total sales across all the stores
+files getting into s3
+
+10:00am to 10:15am  2M batch1
+10:15am to 10:30am  5M (3M + 2M) batch2
+
+if we use batch processing and scheduled your job every 15 mins
+whatever transaction happened between 10am to 1015am - there is no guarantee that by 1030am it will be processed.
+
+problems in batch procesing for this use case:
+==============================================
+1) backpressure - you were supposed to run batch2 but your batch 1 is still running.
+
+2) late arriving records -
+a record which has generated (event time - 10:08am but it arrived late at 10:20am)
+
+3) will have to process the data incremental way as we dont want to calculate the sales for all batches but current batch
+
+4) what if one of the batch fails for some reason
+
+5) how would we manage the state - aggregations. will have to store the sale of previous batch somewhere and then add that to the current batch sale.
+
+6) how to schedule the job for continous listening
+
+
+spark structured streaming takes care of all these issues.
+
+= automatic looping between the batches
+- storing intermediate results
+- combining results to the previous batch results
+- restart from sameplace incase of failure
+
+- In streaming applications, config("spark.sql.shuffle.partitions", 200)  may not makes more sense.
+as we want results quickly, reducing shuffle partitions to low number would makes things faster
+
+
+diff input sources:
+
+there are few built in sources..
+
+File source - reads files written in a dir as a stream of data
+            - files will be processed in the order of the file  modification time.
+            - if latestfirst is set then the order will be reversed
+            supported file formats are - csv, text, json, orc and parquet
+
+Kafka source - reads the data from kafka topic
+
+Socket source - mainly for testing
+              - listening server socket is on the driver.
+
+
+as soon as the streaming query starts, it will prepare the checkpoint location
+
+checkpoint dir is mainly for - 
+    - fault tolerance (starts from where it was failed)
+    - ??
+   
+the streaming query will keep checking for new data in the directory
+
+once it finds new data/files, it will trigger the microbatch
+
+inputdir /
+    - file1
+before the microbatch starts, streaming query updates the checkpoint that file1 is going to be processed.
+once the microbatch finishes, it will update this in the checkpoint location.
+
+streaming query wont stop, it will keep looking for new data.
+
+
+output modes:
+
+incase of complete - should be used when we want to caluclate the count of orders based on their order_status.
+it will recalculate everything from the begining. meaning it will consider previous data also and get us the cumulative counts.
+
+incase of append - only new files will be counted
+
+incase of update - all new orders and anything updated. but if something is neither new nor updated, they will be shown in the current batch.
+
+
+how spark streaming is able to maintain the state?
+
+state store - in memory
+
+samething is even persisted in checkpoint location
+
+state store is a key-value store which provides both the read and write operations. In structured streaming we use the 
+state store to handle stateful operations across the batches.
+
+stateful: groupBy and aggregations
+stateless: select, filter and map
+
+since spark 3.1, we also have DataStreamReader.table() to read tables as streaming dataframes.
+DataStreamWriter.toTable() to write streaming dataframes as tables.
+
+checkpoint:
+- incremental processing
+- fault tolerance
+

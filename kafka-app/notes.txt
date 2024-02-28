@@ -1,4 +1,27 @@
 - when we have topic with single partition, all the messages will be written to the same topic
 - when we have topic with 2 partitions, messages will be published to both the partitions and it is all random not round robin.
+
+### consumer
+- consumer can be defined as logical grouping of one or more consumers
+- it is mandatory for a consumer to register itself to a consumer group
+- consumer instances are seperate process
+- consumer instance of same consumer group can be on different brokers
 - every consumer is always assigned to a consumer group
 - if no group_id is provided then random group id is assigned
+
+### when we have 1 topic, 1 consumer and 2 partitions, 
+    - messages will be published to partition randomly and messages will be consumed by c1 consumer in round robin fashion
+    - one consumer can read from 2 different partitions
+
+### when we have 1 topic, 1 partition and 2 consumers
+- here both consumers are registered to same consumer group
+- same partition can't be assigned to multiple consumer in the same group that means in this case, one consumer will sit idle
+- but if they are belongs to diff consumer group then they can read from same partition
+
+### when we have 1 topic, 2 partitions and 2 consumers
+- here both consumers are registered to same consumer group
+- both the consumers will read 2 partitions and reading is random
+
+
+### 
+https://stackoverflow.com/questions/32390265/what-determines-kafka-consumer-offset

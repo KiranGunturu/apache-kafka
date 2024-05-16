@@ -60,49 +60,31 @@ curl -sL --http1.1 https://cnfl.io/cli | sh -s -- latest
 ![image](https://github.com/KiranGunturu/apache-kafka/assets/91672788/ce23a1d7-35b4-4409-b6fb-8d46a69f82a6)
 
 
-### AWS CLI installation
-
+#### Consume from topic
 ```sh
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
+./bin/confluent kafka topic consume --from-beginning retail_orders
 ```
-#### Verify the installation
+![image](https://github.com/KiranGunturu/apache-kafka/assets/91672788/f96cffb0-6f3b-48ed-9c4f-a1a4db1c311a)
 
+#### Create topic
 ```sh
-aws --version
+./bin/confluent kafka topic create --partitions 4 retail_orders_history
 ```
+![image](https://github.com/KiranGunturu/apache-kafka/assets/91672788/117c930f-7118-4a36-98b9-fcde58c8715d)
 
-#### configure aws credentials: provide access key and secret access key
+![image](https://github.com/KiranGunturu/apache-kafka/assets/91672788/3441d024-b035-4f90-9114-7daf2729b520)
 
+#### Describe topic
 ```sh
-aws configure
+./bin/confluent kafka topic describe retail_orders_history
 ```
-    
+![image](https://github.com/KiranGunturu/apache-kafka/assets/91672788/117c930f-7118-4a36-98b9-fcde58c8715d)
+
+![image](https://github.com/KiranGunturu/apache-kafka/assets/91672788/453fd4f3-8064-49f3-a141-e1056aa38850)
 
 
-### Deployement.
-#### Lets verify if we already have the bucket that we want to provision
 
-```sh
-aws s3api list-buckets --query 'Buckets[*].[Name]' --output text | grep "spotify"
-```
 
-#### Initiate the terraform
-```sh
-terraform init
-```
-#### Plan your actions
-```sh
-terraform plan
-```
-#### Create your aws resources
-```sh
-terraform apply
-```
-#### Delete your aws resources
-```sh
-terraform destroy
-```
+
 
 

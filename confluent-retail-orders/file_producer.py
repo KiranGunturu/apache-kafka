@@ -1,11 +1,11 @@
 from confluent_kafka import Producer
 import json
 
-conf = {'bootstrap.servers': 'pkc-921jm.us-east-2.aws.confluent.cloud:9092',
+conf = {'bootstrap.servers': 'pkc-12576z.us-west2.gcp.confluent.cloud:9092',
         'security.protocol': 'SASL_SSL',
         'sasl.mechanism': 'PLAIN',
-        'sasl.username': 'SCSPFWA4KHX2PXL6',
-        'sasl.password': 'p1SuRG7NdxmJ3cpAOa82aeUdX4GegBWCg6iXfa+zDsS7BZKMyzfYerG3sXzlmMVq',
+        'sasl.username': 'N6QTO6LJ2Q5XZHEI',
+        'sasl.password': 'tg9oqRFFM7A/oONjW2Hp42SU0wsf97gjuXrPtIrfQsEp83Z9i/fWDbBkjDN1GEbo',
         'client.id': 'Kiran Gunturu'}
 
 producer = Producer(conf)
@@ -23,6 +23,6 @@ with open('/workspaces/apache-kafka/confluent-retail-orders/orders_input.json', 
     for line in file:
         order = json.loads(line)
         customer_id = str(order["customer_id"])
-        producer.produce("newtopic", key=customer_id, value=line, callback=acked)
+        producer.produce("retail_orders_history", key=customer_id, value=line, callback=acked)
         producer.poll(1)
         producer.flush()

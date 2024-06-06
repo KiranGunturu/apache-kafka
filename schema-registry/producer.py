@@ -18,6 +18,9 @@ glue_client = session.client('glue', region_name='us-east-1')
 client = SchemaRegistryClient(glue_client,
                               registry_name='orders-registry')
 
+
+# for the very first time, schema will be created inside the glue registry with the name of the topic.
+
 # Create the serializer
 serializer = KafkaSerializer(client)
 
@@ -30,12 +33,12 @@ with open('/workspaces/apache-kafka/schema-registry/orders.avsc', 'r') as schema
     schema = AvroSchema(schema_file.read())
 
 data = {
-    'name': 'Hello',
-    'Age':45,
-    'Subject': 'English'
+    'name': 'Krish',
+    'Age':33,
+    'Subject': 'Physics'
 }
-#data={'Partiiton_no':2}
-record_metadata =producer.send('orders', value=(data, schema)).get(timeout=10)
-print(record_metadata.topic)
-print(record_metadata.partition)
-print(record_metadata.offset)
+
+response_metadata =producer.send('orders', value=(data, schema)).get(timeout=10)
+print(response_metadata.topic)
+print(response_metadata.partition)
+print(response_metadata.offset)

@@ -1,0 +1,3 @@
+#pip3 install boto3 -t.
+#pip3 install aws-glue-schema-registry --upgrade --use-pep517 -t .
+#pip install kafka-python -t .
